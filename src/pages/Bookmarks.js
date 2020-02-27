@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Country } from '../components/Country';
-import { store } from '../store/store';
 import { removeAllBookmarks } from '../store/actions';
+import { useStore } from '../store/use-store';
 
 const useStyles = makeStyles({
     centered: {
@@ -19,12 +19,11 @@ const useStyles = makeStyles({
 });
 
 export function Bookmarks() {
-    const [bookmarks, setBookmarks] = useState(store.getState().bookmarks);
+    const {state, dispatch} = useStore();
+    const {bookmarks} = state;
     const classes = useStyles();
 
-    store.subscribe(() => setBookmarks(store.getState().bookmarks));
-
-    const removeAll = () => store.dispatch(removeAllBookmarks());
+    const removeAll = () => dispatch(removeAllBookmarks());
 
     return (
         <div className={classes.centered}>

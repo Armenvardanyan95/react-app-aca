@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core';
 
-import { store } from '../store/store'
 import { addBookmark, removeBookmark } from '../store/actions'
 import { Country } from '../components/Country';
+import { useStore } from '../store/use-store';
 
 const useStyles = makeStyles({
     centered: {
@@ -18,23 +18,22 @@ const useStyles = makeStyles({
     },
 });
 
+
+
 export function Countries() {
+    const {state, dispatch} = useStore();
     const [countries, setCountries] = useState([]);
-    const [bookmarks, setBookmarks] = useState(store.getState().bookmarks);
     const classes = useStyles();
 
-    store.subscribe(() => setBookmarks(store.getState().bookmarks));
-
-    const addToBookmarks = country => () => store.dispatch(addBookmark(country));
-    const removeFromBookmarks = alpha2Code => () => store.dispatch(removeBookmark(alpha2Code));
-    const isInBookmarks = alpha2Code => bookmarks.some(bookmark => bookmark.alpha2Code === alpha2Code)
+    const addToBookmarks = country => () => dispatch(addBookmark(country));
+    const removeFromBookmarks = alpha2Code => () => dispatch(removeBookmark(alpha2Code));
+    const isInBookmarks = alpha2Code => state.bookmarks.some(bookmark => bookmark.alpha2Code === alpha2Code)
 
     useEffect(() => {
         fetch('https://restcountries.eu/rest/v2/all')
             .then(res => res.json())
             .then(res => setCountries(res));
     }, []);
-
 
     return (
         <div className={classes.centered}>

@@ -2,11 +2,13 @@ import {
     REMOVE_ALL_BOOKMARKS, ADD_BOOKMARK, REMOVE_BOOKMARK
 } from './actions';
 
-const initialState = {
-    bookmarks: [],
+const _hydratedBookmarks = localStorage.getItem('bookmarks');
+
+export const initialState = {
+    bookmarks: _hydratedBookmarks ? JSON.parse(_hydratedBookmarks) : [],
 };
 
-export function reducer(state = initialState, action) {
+export function reducer(state, action) {
     switch(action.type) {
         case ADD_BOOKMARK:
             return {
